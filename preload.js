@@ -16,5 +16,7 @@ contextBridge.exposeInMainWorld('app', {
   abrirSpotify: () => ipcRenderer.invoke('abrir-spotify'),
   expandir: () => ipcRenderer.invoke('expandir'),
   salvarChaveDeepl: (chave) => ipcRenderer.invoke('salvar-chave-deepl', chave),
+  salvarClientId: (id) => ipcRenderer.invoke('salvar-client-id', id),
+  abrirLink: (url) => ipcRenderer.invoke('abrir-link', url),
   aoAtualizar: (cb) => ipcRenderer.on('estado', (_e, msg) => cb(msg)),
 });

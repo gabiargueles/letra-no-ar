@@ -15,6 +15,8 @@ const el = {
   btnTraducao: $('btnTraducao'), bTraducao: $('bTraducao'),
   optRom: $('optRom'), optPt: $('optPt'), optAtravessar: $('optAtravessar'), optOpacidade: $('optOpacidade'),
   chaveDeepl: $('chaveDeepl'), btnSalvarChave: $('btnSalvarChave'), statusChave: $('statusChave'),
+  clientId: $('clientId'), btnSalvarClient: $('btnSalvarClient'), statusClient: $('statusClient'),
+  abrirDevSpotify: $('abrirDevSpotify'), abrirDeepl: $('abrirDeepl'),
   bCapa: $('bCapa'), bFaixa: $('bFaixa'), bLinha: $('bLinha'), bTempo: $('bTempo'), bConfig: $('bConfig'), bFechar: $('bFechar'),
 };
 const fmt = (ms) => { const s = Math.max(0, Math.floor(ms / 1000)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
@@ -140,6 +142,9 @@ window.app.aoAtualizar((m) => {
   } else if (m.tipo === 'letras-conectado') {
     el.btnLetras.classList.toggle('escondido', m.ok);
     el.btnLetrasSair.classList.toggle('escondido', !m.ok);
+  } else if (m.tipo === 'client-id') {
+    el.statusClient.textContent = m.id ? '✅ Client ID salvo. Agora clique em Conectar o Spotify.' : 'Sem Client ID você usa o app padrão (limite de 5 pessoas). Pro seu, veja o tutorial abaixo.';
+    el.clientId.value = m.id || '';
   } else if (m.tipo === 'deepl') {
     el.statusChave.textContent = m.tem ? '✅ Chave DeepL salva — tradução pelo DeepL.' : 'Sem chave: uso o MyMemory (grátis, cota pequena). A chave fica só aqui no seu PC.';
     if (m.tem) el.chaveDeepl.value = '';
@@ -184,6 +189,10 @@ el.optAtravessar.onchange = () => { prefs.atravessar = el.optAtravessar.checked;
 el.optOpacidade.oninput = () => { prefs.opacidade = +el.optOpacidade.value; window.app.opacidade(prefs.opacidade / 100); };
 el.optOpacidade.onchange = salvar;
 // botões do modo barra: ⚙️ aumenta a janela e abre as opções; ✕ fecha
+el.btnSalvarClient.onclick = () => { el.statusClient.textContent = 'Salvando…'; window.app.salvarClientId(el.clientId.value.trim()); };
+el.clientId.addEventListener('keydown', (e) => { if (e.key === 'Enter') el.btnSalvarClient.click(); });
+el.abrirDevSpotify.onclick = () => window.app.abrirLink('https://developer.spotify.com/dashboard');
+el.abrirDeepl.onclick = () => window.app.abrirLink('https://www.deepl.com/pro-api');
 el.btnSalvarChave.onclick = () => { el.statusChave.textContent = 'Salvando…'; window.app.salvarChaveDeepl(el.chaveDeepl.value.trim()); };
 el.chaveDeepl.addEventListener('keydown', (e) => { if (e.key === 'Enter') el.btnSalvarChave.click(); });
 el.bConfig.onclick = () => { window.app.expandir(); el.opcoes.classList.remove('escondido'); };

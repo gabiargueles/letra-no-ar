@@ -171,6 +171,7 @@ function criarJanela() {
   janela.webContents.on('did-finish-load', () => {
     enviar({ tipo: 'conexao', conectado: !!token });
     enviar({ tipo: 'letras-conectado', ok: !!config.spDc });
+    enviar({ tipo: 'client-id', id: config.clientId || '' });
     enviar({ tipo: 'deepl', tem: fs.existsSync(path.join(PASTA, 'traducao.json')) });
     enviar({ tipo: 'prefs', prefs: config.prefs || {} });
     olhar();
@@ -189,6 +190,19 @@ ipcMain.handle('opacidade', (_e, v) => { if (janela) janela.setOpacity(Math.max(
 ipcMain.handle('ignorar-clique', (_e, ignora) => { if (janela) janela.setIgnoreMouseEvents(!!ignora, { forward: true }); });
 ipcMain.handle('salvar-prefs', (_e, prefs) => { config.prefs = prefs; gravarJSON('config.json', config); });
 ipcMain.handle('abrir-spotify', () => shell.openExternal('https://open.spotify.com'));
+ipcMain.handle('abrir-link', (_e, url) => { if (/^https:\/\//.test(String(url || ''))) shell.openExternal(url); });
+// Client ID do app do Spotify da pessoa (pro login do "o que está tocando"). Trocar = reconectar.
+ipcMain.handle('salvar-client-id', (_e, id) => {
+  const v = String(id || '').trim();
+  if (v) config.clientId = v; else delete config.clientId;
+  gravarJSON('config.json', config);
+  // o token antigo é de outro app: zera pra reconectar com o Client ID novo
+  token = null; try { fs.rmSync(path.join(PASTA, 'spotify.json'), { force: true }); } catch {}
+  idAtual = null;
+  enviar({ tipo: 'client-id', id: config.clientId || '' });
+  enviar({ tipo: 'conexao', conectado: false });
+  return true;
+});
 ipcMain.handle('expandir', () => { if (!janela) return; const f = config.full || { width: 400, height: 540 }; const b = janela.getBounds(); janela.setBounds({ x: b.x, y: b.y, width: f.width, height: f.height }); });
 // chave do DeepL: grava traducao.json na pasta de dados (o letras.js lê de lá a cada tradução).
 ipcMain.handle('salvar-chave-deepl', (_e, chave) => {

@@ -42,9 +42,27 @@
     <div class="opcoes escondido" id="opcoes">
       <div class="linha"><button id="btnEntrar" class="grande">Conectar o Spotify</button></div>
       <div class="linha"><button id="btnSair" class="grande secundario escondido">Desconectar o Spotify</button></div>
+      <div class="chave-linha">
+        <input id="clientId" type="text" placeholder="Client ID do seu app Spotify" autocomplete="off">
+        <button id="btnSalvarClient" class="mini">Salvar</button>
+      </div>
+      <div class="dica" id="statusClient"></div>
+      <details class="tut">
+        <summary>📘 Como criar seu app do Spotify (pra conectar)</summary>
+        <ol>
+          <li>Abra o <b>painel de desenvolvedor</b> do Spotify e faça login (botão abaixo).</li>
+          <li>Clique em <b>Create app</b>.</li>
+          <li>Nome e descrição: qualquer coisa (ex.: <i>Letra no Ar</i>).</li>
+          <li>Em <b>Redirect URIs</b>, cole exatamente:<br><code>http://127.0.0.1:3040/spotify</code> e clique em <b>Add</b>.</li>
+          <li>Marque <b>Web API</b>, aceite os termos e <b>Save</b>.</li>
+          <li>Entre no app criado → <b>Settings</b> → copie o <b>Client ID</b>.</li>
+          <li>Cole no campo acima e clique em <b>Salvar</b>. Pronto — agora é só <b>Conectar o Spotify</b>.</li>
+        </ol>
+        <button id="abrirDevSpotify" class="mini">Abrir painel do Spotify</button>
+      </details>
       <div class="linha"><button id="btnLetras" class="grande">Conectar letras do Spotify (sincronia exata)</button></div>
       <div class="linha"><button id="btnLetrasSair" class="grande secundario escondido">Desconectar letras</button></div>
-      <div class="dica" id="dicaLetras">A letra vem do próprio Spotify (igual ao app). Sem isso, uso LRCLIB/NetEase (às vezes fora de tempo).</div>
+      <div class="dica" id="dicaLetras">A letra vem do próprio Spotify (igual ao app). É só fazer login na janelinha — não precisa de app. Sem isso, uso LRCLIB/NetEase (às vezes fora de tempo).</div>
       <label class="op"><input type="checkbox" id="optRom" checked> Mostrar romanização (coreano)</label>
       <label class="op"><input type="checkbox" id="optPt" checked> Mostrar tradução em português</label>
       <label class="op"><input type="checkbox" id="optAtravessar"> Clicar "através" da janela — fantasma (liga/desliga: Ctrl+Alt+L)</label>
@@ -54,6 +72,16 @@
         <button id="btnSalvarChave" class="mini">Salvar</button>
       </div>
       <div class="dica" id="statusChave">Sem chave: uso o MyMemory (grátis, cota pequena). A chave fica só aqui no seu PC.</div>
+      <details class="tut">
+        <summary>📗 Como conseguir a chave DeepL (opcional)</summary>
+        <ol>
+          <li>Crie uma conta grátis no <b>DeepL API</b> (plano <b>DeepL API Free</b>) — botão abaixo.</li>
+          <li>Precisa informar um cartão pra validar, mas o plano grátis <b>não cobra</b> (até ~500 mil caracteres/mês).</li>
+          <li>Em <b>Account → API keys</b>, copie a <b>Authentication Key</b> (costuma terminar em <code>:fx</code>).</li>
+          <li>Cole no campo acima e clique em <b>Salvar</b>. Sem isso, a tradução usa o MyMemory (grátis, mais limitado).</li>
+        </ol>
+        <button id="abrirDeepl" class="mini">Abrir painel do DeepL</button>
+      </details>
     </div>
 
     <!-- a letra -->
