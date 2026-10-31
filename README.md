@@ -38,19 +38,6 @@ E o **modo barra**, pra encostar na barra de tarefas:
 - A letra vem de um endpoint **não-oficial** do Spotify e pode mudar com o tempo; quando mudar, precisa atualizar.
 - Nenhum segredo (cookie/token/chave) fica no repositório — tudo mora só na sua máquina (`%APPDATA%\letra-no-ar`).
 
-## Para desenvolver
-
-- **Electron** (`main.js` processo principal, `preload.js` a ponte, `ui/` a interface).
-- `main.js` — login do Spotify (o que está tocando) e orquestra tudo.
-- `spotify-letras.js` — letra pelo Spotify (cookie `sp_dc` → token → `color-lyrics`) + romaji do japonês (kuroshiro).
-- `letras.js` — fonte reserva da letra (LRCLIB + NetEase), romanização do coreano e tradução, com cache em disco.
-
-```
-npm install
-npm run app      # roda em modo de desenvolvimento
-npm run dist     # gera o portátil e o instalador em dist/
-```
-
 ---
 
 Feito pra acompanhar a letra da música em qualquer tela. 🎶
