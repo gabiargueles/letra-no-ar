@@ -38,19 +38,22 @@ function posicaoAgora() {
   return S.base.pos + (Date.now() - S.base.em);
 }
 
-function mostrarAviso(texto) {
+function mostrarAviso(texto, barra) {
   el.letra.classList.remove('sem-sync');
   el.letra.innerHTML = `<div class="aviso">${texto}</div>`;
   S.nodes = []; S.ativa = -1;
+  // o mesmo aviso também aparece no modo barra (senão ficava a linha da música anterior)
+  const b = barra != null ? barra : texto.replace(/<[^>]+>/g, ' ');
+  el.bLinha.innerHTML = `<span class="b-base">${esc(b)}</span>`;
 }
 
 // desenha todas as linhas da letra atual
 function desenharLetra() {
   const L = S.letra;
   if (!L) return;
-  if (L.erro) return mostrarAviso('Não deu pra buscar a letra:<br>' + L.erro);
-  if (L.instrumental) return mostrarAviso('🎵 Faixa instrumental');
-  if (!L.achou || !L.linhas || !L.linhas.length) return mostrarAviso('Letra não encontrada 🙁');
+  if (L.erro) return mostrarAviso('Não deu pra buscar a letra:<br>' + L.erro, 'não deu pra buscar a letra');
+  if (L.instrumental) return mostrarAviso('🎵 Faixa instrumental', '🎵 instrumental');
+  if (!L.achou || !L.linhas || !L.linhas.length) return mostrarAviso('Letra não encontrada 🙁', 'não tem letra 🙁');
 
   el.letra.classList.toggle('sem-sync', !L.sincronizada);
   el.letra.innerHTML = '';
@@ -74,6 +77,8 @@ function desenharLetra() {
   });
   S.ativa = -1;
   el.fonte.textContent = L.fonte ? (L.sincronizada ? '' : 'sem sincronia · ') + 'letra: ' + L.fonte : '';
+  // na barra, letra sem sincronia não tem como rolar; avisa
+  if (!L.sincronizada) el.bLinha.innerHTML = '<span class="b-base">♪ letra sem sincronia</span>';
 }
 
 // marca a linha da vez e centraliza
@@ -114,8 +119,8 @@ window.app.aoAtualizar((m) => {
     S.conectado = m.conectado;
     el.btnEntrar.classList.toggle('escondido', m.conectado);
     el.btnSair.classList.toggle('escondido', !m.conectado);
-    if (!m.conectado) { el.capa.removeAttribute('src'); el.bCapa.removeAttribute('src'); el.faixa.textContent = 'Letra no Ar'; el.bFaixa.textContent = 'Letra no Ar'; el.bLinha.textContent = 'conecte o Spotify'; el.artista.textContent = 'conecte o Spotify pra começar'; mostrarAviso('Conecte o Spotify nas opções (⚙️).'); el.preenche.style.width = '0'; }
-    else if (!S.letra) mostrarAviso('Conectado! Dá play numa música no Spotify.');
+    if (!m.conectado) { el.capa.removeAttribute('src'); el.bCapa.removeAttribute('src'); el.faixa.textContent = 'Letra no Ar'; el.bFaixa.textContent = 'Letra no Ar'; el.artista.textContent = 'conecte o Spotify pra começar'; mostrarAviso('Conecte o Spotify nas opções (⚙️).', 'conecte o Spotify'); el.preenche.style.width = '0'; }
+    else if (!S.letra) mostrarAviso('Conectado! Dá play numa música no Spotify.', 'dá play no Spotify');
   } else if (m.tipo === 'tocando') {
     el.faixa.textContent = m.faixa;
     el.artista.textContent = m.artista;
@@ -126,9 +131,10 @@ window.app.aoAtualizar((m) => {
   } else if (m.tipo === 'parado') {
     el.faixa.textContent = 'Nada tocando'; el.artista.textContent = 'dá play no Spotify';
     el.capa.removeAttribute('src'); el.preenche.style.width = '0';
-    S.base = null; S.letra = null; S.idLetra = null; mostrarAviso('Nada tocando agora. Dá play numa música no Spotify.');
+    el.bFaixa.textContent = 'Nada tocando';
+    S.base = null; S.letra = null; S.idLetra = null; mostrarAviso('Nada tocando agora. Dá play numa música no Spotify.', 'nada tocando');
   } else if (m.tipo === 'letra-carregando') {
-    if (m.id !== S.idLetra) { S.letra = null; mostrarAviso('Buscando a letra…'); }
+    if (m.id !== S.idLetra) { S.letra = null; mostrarAviso('Buscando a letra…', 'buscando a letra…'); }
   } else if (m.tipo === 'letra') {
     S.letra = m.letra; S.idLetra = m.id; S.ativa = -1; desenharLetra();
   } else if (m.tipo === 'letras-conectado') {
