@@ -18,6 +18,7 @@ const el = {
   bCapa: $('bCapa'), bFaixa: $('bFaixa'), bLinha: $('bLinha'), bTempo: $('bTempo'), bConfig: $('bConfig'), bFechar: $('bFechar'),
 };
 const fmt = (ms) => { const s = Math.max(0, Math.floor(ms / 1000)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
 let prefs = { rom: true, pt: true, atravessar: false, opacidade: 100, fixar: true, offset: 0 };
 const S = {
@@ -91,9 +92,14 @@ function rolar() {
   if (S.nodes[S.ativa]) S.nodes[S.ativa].classList.remove('ativa');
   S.ativa = i;
   if (S.nodes[i]) { S.nodes[i].classList.add('ativa'); S.nodes[i].scrollIntoView({ block: 'center', behavior: 'smooth' }); }
-  // no modo barra, mostra só a linha da vez. Com a tradução ligada → português; senão → romanização (ou original).
+  // no modo barra, a linha da vez. Com a tradução ligada → romanização (ou original) + tradução juntas.
   const lin = i >= 0 ? L.linhas[i] : null;
-  el.bLinha.textContent = !lin ? '♪' : (prefs.pt && lin.pt) ? lin.pt : (lin.rom || lin.ko || '♪');
+  if (!lin) { el.bLinha.textContent = '♪'; }
+  else {
+    const base = lin.rom || lin.ko || '♪';
+    if (prefs.pt && lin.pt) el.bLinha.innerHTML = `<span>${esc(base)}</span><span class="b-pt">${esc(lin.pt)}</span>`;
+    else el.bLinha.textContent = base;
+  }
 }
 setInterval(rolar, 250);
 
