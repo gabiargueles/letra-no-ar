@@ -19,16 +19,19 @@
       "main.js",
       "preload.js",
       "letras.js",
+      "spotify-letras.js",
       "ui/**",
       "package.json"
+    ],
+    "asarUnpack": [
+      "node_modules/kuromoji/dict/**"
     ],
     "directories": {
       "output": "dist",
       "buildResources": "build"
     },
     "win": {
-      "target": "portable",
-      "icon": "build/icon.png"
+      "target": "portable"
     },
     "portable": {
       "artifactName": "LetraNoAr-${version}.exe",
