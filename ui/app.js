@@ -12,7 +12,9 @@ const el = {
   btnConfig: $('btnConfig'), btnFixar: $('btnFixar'), btnMin: $('btnMin'), btnFechar: $('btnFechar'),
   btnEntrar: $('btnEntrar'), btnSair: $('btnSair'),
   btnLetras: $('btnLetras'), btnLetrasSair: $('btnLetrasSair'),
+  btnTraducao: $('btnTraducao'), bTraducao: $('bTraducao'),
   optRom: $('optRom'), optPt: $('optPt'), optAtravessar: $('optAtravessar'), optOpacidade: $('optOpacidade'),
+  chaveDeepl: $('chaveDeepl'), btnSalvarChave: $('btnSalvarChave'), statusChave: $('statusChave'),
   bCapa: $('bCapa'), bFaixa: $('bFaixa'), bLinha: $('bLinha'), bTempo: $('bTempo'), bConfig: $('bConfig'), bFechar: $('bFechar'),
 };
 const fmt = (ms) => { const s = Math.max(0, Math.floor(ms / 1000)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
@@ -89,8 +91,9 @@ function rolar() {
   if (S.nodes[S.ativa]) S.nodes[S.ativa].classList.remove('ativa');
   S.ativa = i;
   if (S.nodes[i]) { S.nodes[i].classList.add('ativa'); S.nodes[i].scrollIntoView({ block: 'center', behavior: 'smooth' }); }
-  // no modo barra, mostra só a linha da vez — priorizando a romanização (cai pro original se não tiver)
-  el.bLinha.textContent = (i >= 0 && L.linhas[i]) ? (L.linhas[i].rom || L.linhas[i].ko || '♪') : '♪';
+  // no modo barra, mostra só a linha da vez. Com a tradução ligada → português; senão → romanização (ou original).
+  const lin = i >= 0 ? L.linhas[i] : null;
+  el.bLinha.textContent = !lin ? '♪' : (prefs.pt && lin.pt) ? lin.pt : (lin.rom || lin.ko || '♪');
 }
 setInterval(rolar, 250);
 
@@ -125,6 +128,10 @@ window.app.aoAtualizar((m) => {
   } else if (m.tipo === 'letras-conectado') {
     el.btnLetras.classList.toggle('escondido', m.ok);
     el.btnLetrasSair.classList.toggle('escondido', !m.ok);
+  } else if (m.tipo === 'deepl') {
+    el.statusChave.textContent = m.tem ? '✅ Chave DeepL salva — tradução pelo DeepL.' : 'Sem chave: uso o MyMemory (grátis, cota pequena). A chave fica só aqui no seu PC.';
+    if (m.tem) el.chaveDeepl.value = '';
+    el.chaveDeepl.placeholder = m.tem ? 'Chave DeepL salva (cole outra pra trocar)' : 'Chave DeepL (tradução melhor)';
   } else if (m.tipo === 'prefs') {
     prefs = Object.assign(prefs, m.prefs || {});
     aplicarPrefs();
@@ -138,6 +145,8 @@ function aplicarPrefs() {
   el.optAtravessar.checked = prefs.atravessar;
   el.optOpacidade.value = prefs.opacidade;
   el.btnFixar.classList.toggle('ativo', prefs.fixar);
+  el.btnTraducao.classList.toggle('ativo', prefs.pt);
+  el.bTraducao.classList.toggle('ativo', prefs.pt);
   window.app.opacidade(prefs.opacidade / 100);
   window.app.fixar(prefs.fixar);
   window.app.ignorarClique(prefs.atravessar);
@@ -154,10 +163,16 @@ el.btnSair.onclick = () => window.app.sair();
 el.btnLetras.onclick = () => window.app.conectarLetras();
 el.btnLetrasSair.onclick = () => window.app.desconectarLetras();
 el.optRom.onchange = () => { prefs.rom = el.optRom.checked; desenharLetra(); salvar(); };
-el.optPt.onchange = () => { prefs.pt = el.optPt.checked; desenharLetra(); salvar(); };
+function aplicarTraducao() { el.optPt.checked = prefs.pt; el.btnTraducao.classList.toggle('ativo', prefs.pt); el.bTraducao.classList.toggle('ativo', prefs.pt); desenharLetra(); }
+function alternarTraducao() { prefs.pt = !prefs.pt; aplicarTraducao(); salvar(); }
+el.optPt.onchange = () => { prefs.pt = el.optPt.checked; aplicarTraducao(); salvar(); };
+el.btnTraducao.onclick = alternarTraducao;
+el.bTraducao.onclick = alternarTraducao;
 el.optAtravessar.onchange = () => { prefs.atravessar = el.optAtravessar.checked; window.app.ignorarClique(prefs.atravessar); salvar(); };
 el.optOpacidade.oninput = () => { prefs.opacidade = +el.optOpacidade.value; window.app.opacidade(prefs.opacidade / 100); };
 el.optOpacidade.onchange = salvar;
 // botões do modo barra: ⚙️ aumenta a janela e abre as opções; ✕ fecha
+el.btnSalvarChave.onclick = () => { el.statusChave.textContent = 'Salvando…'; window.app.salvarChaveDeepl(el.chaveDeepl.value.trim()); };
+el.chaveDeepl.addEventListener('keydown', (e) => { if (e.key === 'Enter') el.btnSalvarChave.click(); });
 el.bConfig.onclick = () => { window.app.expandir(); el.opcoes.classList.remove('escondido'); };
 el.bFechar.onclick = () => window.app.fechar();

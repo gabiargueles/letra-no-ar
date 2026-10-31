@@ -16,6 +16,7 @@
       <div class="b-linha" id="bLinha">conecte o Spotify</div>
       <div class="b-tempo" id="bTempo">0:00</div>
       <div class="b-botoes">
+        <button id="bTraducao" title="Tradução em português (liga/desliga)">🌐</button>
         <button id="bConfig" title="Opções (aumenta a janela)">⚙️</button>
         <button id="bFechar" title="Fechar">✕</button>
       </div>
@@ -29,6 +30,7 @@
         <div class="artista" id="artista">conecte o Spotify pra começar</div>
       </div>
       <div class="botoes">
+        <button id="btnTraducao" title="Tradução em português (liga/desliga)">🌐</button>
         <button id="btnConfig" title="Opções">⚙️</button>
         <button id="btnFixar" title="Sempre em primeiro plano" class="ativo">📌</button>
         <button id="btnMin" title="Minimizar">—</button>
@@ -47,6 +49,11 @@
       <label class="op"><input type="checkbox" id="optPt" checked> Mostrar tradução em português</label>
       <label class="op"><input type="checkbox" id="optAtravessar"> Clicar "através" da janela — fantasma (liga/desliga: Ctrl+Alt+L)</label>
       <label class="op slider">Opacidade <input type="range" id="optOpacidade" min="40" max="100" value="100"></label>
+      <div class="chave-linha">
+        <input id="chaveDeepl" type="password" placeholder="Chave DeepL (tradução melhor)" autocomplete="off">
+        <button id="btnSalvarChave" class="mini">Salvar</button>
+      </div>
+      <div class="dica" id="statusChave">Sem chave: uso o MyMemory (grátis, cota pequena). A chave fica só aqui no seu PC.</div>
     </div>
 
     <!-- a letra -->

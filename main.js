@@ -168,6 +168,7 @@ function criarJanela() {
   janela.webContents.on('did-finish-load', () => {
     enviar({ tipo: 'conexao', conectado: !!token });
     enviar({ tipo: 'letras-conectado', ok: !!config.spDc });
+    enviar({ tipo: 'deepl', tem: fs.existsSync(path.join(PASTA, 'traducao.json')) });
     enviar({ tipo: 'prefs', prefs: config.prefs || {} });
     olhar();
   });
@@ -186,6 +187,19 @@ ipcMain.handle('ignorar-clique', (_e, ignora) => { if (janela) janela.setIgnoreM
 ipcMain.handle('salvar-prefs', (_e, prefs) => { config.prefs = prefs; gravarJSON('config.json', config); });
 ipcMain.handle('abrir-spotify', () => shell.openExternal('https://open.spotify.com'));
 ipcMain.handle('expandir', () => { if (!janela) return; const f = config.full || { width: 400, height: 540 }; const b = janela.getBounds(); janela.setBounds({ x: b.x, y: b.y, width: f.width, height: f.height }); });
+// chave do DeepL: grava traducao.json na pasta de dados (o letras.js lê de lá a cada tradução).
+ipcMain.handle('salvar-chave-deepl', (_e, chave) => {
+  const arq = path.join(PASTA, 'traducao.json');
+  const k = String(chave || '').trim();
+  try {
+    if (!k) fs.rmSync(arq, { force: true });
+    else fs.writeFileSync(arq, JSON.stringify({ deeplKey: k }));
+    // limpa o cache de letras pra retraduzir com a fonte nova e rebusca a faixa atual
+    try { for (const f of fs.readdirSync(path.join(PASTA, 'spotify-letras'))) fs.rmSync(path.join(PASTA, 'spotify-letras', f), { force: true }); } catch {}
+    idAtual = null; enviar({ tipo: 'deepl', tem: !!k }); olhar();
+    return true;
+  } catch (e) { log('chave DeepL: ' + e.message); return false; }
+});
 
 app.whenReady().then(() => {
   criarJanela();

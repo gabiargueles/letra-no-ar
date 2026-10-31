@@ -73,7 +73,8 @@ body.compacto .barra {
   display: flex; align-items: center; justify-content: center;
 }
 .botoes button:hover { background: rgba(255, 255, 255, 0.12); }
-#btnFixar.ativo { background: rgba(139, 92, 246, 0.35); }
+#btnFixar.ativo, #btnTraducao.ativo { background: rgba(139, 92, 246, 0.35); }
+.b-botoes button.ativo { background: rgba(139, 92, 246, 0.45); }
 
 /* --- opções --- */
 .opcoes {
@@ -97,6 +98,11 @@ button.grande:hover { filter: brightness(1.08); }
 button.grande.secundario { background: rgba(255, 255, 255, 0.12); }
 .escondido { display: none !important; }
 .dica { font-size: 11px; color: var(--fraco); line-height: 1.4; }
+.chave-linha { display: flex; gap: 6px; }
+.chave-linha input { flex: 1; min-width: 0; padding: 7px 9px; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); background: rgba(0,0,0,0.3); color: var(--texto); font-size: 12.5px; }
+.chave-linha input:focus { outline: none; border-color: var(--destaque); }
+button.mini { padding: 0 12px; border: none; border-radius: 7px; cursor: pointer; background: #8b5cf6; color: #fff; font-size: 12.5px; font-weight: 600; }
+button.mini:hover { filter: brightness(1.08); }
 #btnLetras { background: #8b5cf6; }
 
 /* --- letra --- */
