@@ -23,7 +23,7 @@ const ESCOPO = 'user-read-currently-playing user-read-playback-state';
 const PASTA = app.getPath('userData');
 const log = (m) => console.log(new Date().toISOString(), m);
 const letras = criarLetras({ dataDir: PASTA, log });
-const spLetras = criarSpotifyLetras({ getSpDc: () => config.spDc, romanizar: letras.romanizar, traduzir: letras.traduzir, dataDir: PASTA, log });
+const spLetras = criarSpotifyLetras({ getSpDc: () => config.spDc, romanizar: letras.romanizar, traduzir: letras.traduzir, dataDir: PASTA, dictPath: path.join(__dirname, 'node_modules', 'kuromoji', 'dict'), log });
 
 let janela = null;
 let token = lerJSON('spotify.json', null);     // { access, refresh, exp, scope }

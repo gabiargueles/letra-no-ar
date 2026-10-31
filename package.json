@@ -34,5 +34,9 @@
       "artifactName": "LetraNoAr-${version}.exe",
       "unpackDirName": "LetraNoAr"
     }
+  },
+  "dependencies": {
+    "kuroshiro": "^1.2.1",
+    "kuroshiro-analyzer-kuromoji": "^1.1.0"
   }
 }

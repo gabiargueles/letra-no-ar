@@ -34,8 +34,29 @@ function gerarTotp(segredo, horaSegundos) {
   return String(bin % 1000000).padStart(6, '0');
 }
 
-module.exports = function criarSpotifyLetras({ getSpDc, romanizar, traduzir, dataDir, log }) {
+module.exports = function criarSpotifyLetras({ getSpDc, romanizar, traduzir, dataDir, dictPath, log }) {
   let token = null; // { access, exp }
+
+  // kuroshiro: romaniza japonês de verdade (inclusive kanji), offline, usando o dicionário do kuromoji.
+  // Carrega o dicionário na 1ª música japonesa (demora ~1-2 s), depois fica pronto em memória.
+  let kuro = null, kuroInit = null;
+  function garantirKuro() {
+    if (kuro) return Promise.resolve(kuro);
+    if (!kuroInit && dictPath) {
+      kuroInit = (async () => {
+        const K = require('kuroshiro').default || require('kuroshiro');
+        const A = require('kuroshiro-analyzer-kuromoji').default || require('kuroshiro-analyzer-kuromoji');
+        const k = new K();
+        await k.init(new A({ dictPath }));
+        kuro = k; log('kuroshiro pronto (romaji de japonês com kanji)'); return k;
+      })().catch((e) => { log('kuroshiro falhou: ' + e.message); kuroInit = null; throw e; });
+    }
+    return kuroInit || Promise.reject(new Error('sem dicionário'));
+  }
+  async function romajiJa(texto) {
+    try { const k = await garantirKuro(); const r = await k.convert(texto, { to: 'romaji', mode: 'spaced', romajiSystem: 'hepburn' }); return r.replace(/\s+/g, ' ').trim(); }
+    catch { return romaji(texto); } // sem dicionário: cai no kana (kanji fica no original)
+  }
   const dirCache = path.join(dataDir, 'spotify-letras');
   try { fs.mkdirSync(dirCache, { recursive: true }); } catch {}
   const normal = (s) => String(s || '').toLowerCase().normalize('NFKC').replace(/[^\p{L}\p{N}]+/gu, '');
@@ -88,10 +109,14 @@ module.exports = function criarSpotifyLetras({ getSpDc, romanizar, traduzir, dat
   const temHangul = (s) => /[가-힣]/.test(s || '');
   const temLetra = (s) => /[a-z]/i.test(s || '');
 
-  // traduz as linhas para PT (coreano e inglês), pela função do letras.js (DeepL se tiver chave, senão MyMemory)
-  async function traduzirLinhas(letra) {
+  const ehJa = (s) => !temHangul(s) && (temKana(s) || temKanji(s));
+
+  // em segundo plano: romaniza o japonês (com kanji, via kuroshiro) e traduz tudo para PT.
+  async function enriquecer(letra) {
     const linhas = letra.linhas;
-    const ehJa = (s) => !temHangul(s) && (temKana(s) || temKanji(s));
+    // romaji completo do japonês (substitui o kana-só que já estava na tela)
+    const idxJaRom = linhas.map((l, i) => (ehJa(l.ko) ? i : -1)).filter((i) => i >= 0);
+    await Promise.all(idxJaRom.map(async (i) => { linhas[i].rom = await romajiJa(linhas[i].ko); }));
     const idxKo = linhas.map((l, i) => (temHangul(l.ko) ? i : -1)).filter((i) => i >= 0);
     const idxJa = linhas.map((l, i) => (ehJa(l.ko) ? i : -1)).filter((i) => i >= 0);
     const idxEn = linhas.map((l, i) => (!temHangul(l.ko) && !ehJa(l.ko) && temLetra(l.ko) ? i : -1)).filter((i) => i >= 0);
@@ -137,9 +162,9 @@ module.exports = function criarSpotifyLetras({ getSpDc, romanizar, traduzir, dat
     });
     log(`letra Spotify: ${linhas.length} linhas (${sincronizada ? 'sincronizada' : 'sem sincronia'})`);
     const letra = { versao: 1, id: trackId, achou: linhas.length > 0, sincronizada, fonte: 'Spotify', linhas, traduzido: false };
-    // dispara a tradução em segundo plano
-    if (letra.achou && typeof traduzir === 'function') {
-      traduzirLinhas(letra).then((t) => { if (typeof aoTraduzir === 'function') aoTraduzir(t); }).catch((e) => log('tradução Spotify falhou: ' + e.message));
+    // em segundo plano: romaniza o japonês (com kanji) e traduz — depois reenvia a letra enriquecida
+    if (letra.achou) {
+      enriquecer(letra).then((t) => { if (typeof aoTraduzir === 'function') aoTraduzir(t); }).catch((e) => log('enriquecer letra falhou: ' + e.message));
     }
     return letra;
   }
