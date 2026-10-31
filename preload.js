@@ -5,6 +5,8 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('app', {
   entrar: () => ipcRenderer.invoke('entrar'),
   sair: () => ipcRenderer.invoke('sair'),
+  conectarLetras: () => ipcRenderer.invoke('conectar-letras'),
+  desconectarLetras: () => ipcRenderer.invoke('desconectar-letras'),
   fechar: () => ipcRenderer.invoke('fechar'),
   minimizar: () => ipcRenderer.invoke('minimizar'),
   fixar: (fixo) => ipcRenderer.invoke('fixar', fixo),
