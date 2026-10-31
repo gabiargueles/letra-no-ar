@@ -6,7 +6,7 @@
   "main": "main.js",
   "scripts": {
     "app": "electron .",
-    "dist": "electron-builder --win portable"
+    "dist": "electron-builder --win portable nsis"
   },
   "devDependencies": {
     "electron": "^44.9.2",
@@ -31,11 +31,23 @@
       "buildResources": "build"
     },
     "win": {
-      "target": "portable"
+      "target": [
+        "portable",
+        "nsis"
+      ]
     },
     "portable": {
-      "artifactName": "LetraNoAr-${version}.exe",
+      "artifactName": "LetraNoAr-Portatil-${version}.exe",
       "unpackDirName": "LetraNoAr"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Letra no Ar",
+      "artifactName": "LetraNoAr-Instalador-${version}.exe"
     }
   },
   "dependencies": {

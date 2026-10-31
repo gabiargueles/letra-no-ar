@@ -3,49 +3,48 @@
 Uma janelinha **sempre em primeiro plano** (Windows) que mostra a **letra sincronizada** da música
 tocando no **Spotify** — e rola no tempo certo, como o recurso de letras do próprio Spotify.
 
-Feita pra deixar de canto na tela (ou encostada na barra de tarefas) enquanto você ouve música.
+Serve pra **acompanhar a letra de qualquer tela** — em cima de um jogo, vídeo, stream, o que for — sem
+precisar abrir o Spotify na frente. Fica de canto ou encostada na barra de tarefas.
 
 ## O que faz
 
-- Pega a música tocando no Spotify (login uma vez, sem guardar senha — OAuth PKCE).
-- Mostra a **letra sincronizada**, com a linha da vez destacada e rolagem automática.
-- **Letra direto do Spotify** (a mesma do app, sincronia idêntica) quando você conecta as letras;
-  senão cai no **LRCLIB / NetEase** como reserva.
-- **Romanização** do coreano e do japonês (kana) e **tradução em português** (DeepL se tiver chave, senão MyMemory).
+- Pega a música tocando no Spotify e mostra a **letra sincronizada**, com a linha da vez destacada e rolagem automática.
+- **Letra direto do Spotify** (a mesma do app, sincronia idêntica); senão cai no **LRCLIB / NetEase** como reserva.
+- **Romanização** do coreano e do **japonês** (inclusive kanji) e **tradução em português**.
 - **Modo barra**: deixe a janela bem baixinha e ela vira uma faixa horizontal
-  `capa | música | ····· letra ····· | tempo`, mostrando só a linha da vez (e priorizando a romanização).
+  `capa | música | ····· letra ····· | tempo`, mostrando só a linha da vez.
 - Sempre em primeiro plano, sem bordas, arrastável, com opacidade e "modo fantasma" (clicar através, Ctrl+Alt+L).
 
-## Como rodar
+## Como baixar e usar
 
-```
-npm install
-npm run app
-```
+1. Baixe o **instalador** ou a versão **portátil** na página de [Releases](../../releases).
+2. Abra o app e clique na **engrenagem (⚙️)**.
+3. **Conectar o Spotify** (saber o que está tocando): crie um app grátis no Spotify e cole o **Client ID** —
+   o passo a passo está no próprio app (tutorial "Como criar seu app do Spotify"). Depois clique em **Conectar o Spotify**.
+4. **Conectar letras do Spotify**: faça login na janelinha que abre. Isso traz a letra igual à do Spotify (não precisa de app).
+5. *(Opcional)* cole uma **chave DeepL** no campo das opções pra tradução melhor (tem tutorial também). Sem ela, uso o MyMemory.
+6. Dê **play** numa música no Spotify — a letra começa a rolar. ✨
 
-Gerar um `.exe` portátil:
-
-```
-npm run dist
-```
-
-No app, clique no ⚙️ → **Conectar o Spotify** (o que está tocando) e, para a letra idêntica à do Spotify,
-**Conectar letras do Spotify** (login do Spotify web numa janelinha, uma vez).
-
-## Como está feito
-
-- **Electron** (`main.js` processo principal, `preload.js` a ponte, `ui/` a interface).
-- `letras.js` — letra pela fonte reserva (LRCLIB + NetEase), romanização do coreano e tradução. Com cache em disco.
-- `spotify-letras.js` — letra pelo endpoint interno do Spotify (não-oficial): cookie `sp_dc` → token (TOTP) →
-  `color-lyrics`. Traduz e romaniza (coreano + japonês kana) por cima.
+> Cada pessoa usa o próprio app do Spotify e o próprio login, então funciona pra qualquer um, em qualquer PC.
 
 ## Avisos
 
-- O endpoint de letras do Spotify é **não-oficial** e pode mudar; quando mudar, é preciso atualizar.
-- Romanização de **kanji** (japonês) ainda não é feita (precisaria de um dicionário de leituras) — por ora,
-  só as linhas de kana romanizam.
-- Nenhum segredo (cookie/token) fica no repositório — tudo mora em `%APPDATA%\letra-no-ar`.
+- A letra vem de um endpoint **não-oficial** do Spotify e pode mudar com o tempo; quando mudar, precisa atualizar.
+- Nenhum segredo (cookie/token/chave) fica no repositório — tudo mora só na sua máquina (`%APPDATA%\letra-no-ar`).
+
+## Para desenvolver
+
+- **Electron** (`main.js` processo principal, `preload.js` a ponte, `ui/` a interface).
+- `main.js` — login do Spotify (o que está tocando) e orquestra tudo.
+- `spotify-letras.js` — letra pelo Spotify (cookie `sp_dc` → token → `color-lyrics`) + romaji do japonês (kuroshiro).
+- `letras.js` — fonte reserva da letra (LRCLIB + NetEase), romanização do coreano e tradução, com cache em disco.
+
+```
+npm install
+npm run app      # roda em modo de desenvolvimento
+npm run dist     # gera o portátil e o instalador em dist/
+```
 
 ---
 
-Feito com carinho pra ouvir música com os amigos. 🐸
+Feito pra acompanhar a letra da música em qualquer tela. 🎶
