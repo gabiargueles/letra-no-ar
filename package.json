@@ -1,0 +1,38 @@
+{
+  "name": "letra-no-ar",
+  "version": "1.0.0",
+  "description": "Letra no Ar — janelinha sempre em primeiro plano que mostra a letra sincronizada da música tocando no Spotify",
+  "author": "Gabbie",
+  "main": "main.js",
+  "scripts": {
+    "app": "electron .",
+    "dist": "electron-builder --win portable"
+  },
+  "devDependencies": {
+    "electron": "^44.9.2",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "com.gabbie.letranoar",
+    "productName": "Letra no Ar",
+    "files": [
+      "main.js",
+      "preload.js",
+      "letras.js",
+      "ui/**",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "win": {
+      "target": "portable",
+      "icon": "build/icon.png"
+    },
+    "portable": {
+      "artifactName": "LetraNoAr-${version}.exe",
+      "unpackDirName": "LetraNoAr"
+    }
+  }
+}

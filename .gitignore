@@ -1,0 +1,11 @@
+# dependências e builds
+node_modules/
+dist/
+
+# dados e configs locais do app ficam em %APPDATA%\letra-no-ar (fora daqui),
+# mas por garantia nada de token/cookie/config entra no git:
+config.json
+spotify.json
+spotify-letras/
+letras/
+*.log

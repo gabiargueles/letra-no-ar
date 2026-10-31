@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Letra no Ar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="card">
+    <!-- MODO BARRA: aparece quando a janela está baixinha (encostar na barra de tarefas).
+         capa | música | ····· linha da letra ····· | tempo. A barra toda arrasta a janela. -->
+    <div class="barra" id="barra">
+      <img class="b-capa" id="bCapa" alt="">
+      <div class="b-faixa" id="bFaixa">Letra no Ar</div>
+      <div class="b-linha" id="bLinha">conecte o Spotify</div>
+      <div class="b-tempo" id="bTempo">0:00</div>
+      <div class="b-botoes">
+        <button id="bConfig" title="Opções (aumenta a janela)">⚙️</button>
+        <button id="bFechar" title="Fechar">✕</button>
+      </div>
+    </div>
+
+    <!-- barra de cima: capa + música, e os botões. A barra toda arrasta a janela. -->
+    <header class="topo" id="topo">
+      <img class="capa" id="capa" alt="">
+      <div class="info">
+        <div class="faixa" id="faixa">Letra no Ar</div>
+        <div class="artista" id="artista">conecte o Spotify pra começar</div>
+      </div>
+      <div class="botoes">
+        <button id="btnConfig" title="Opções">⚙️</button>
+        <button id="btnFixar" title="Sempre em primeiro plano" class="ativo">📌</button>
+        <button id="btnMin" title="Minimizar">—</button>
+        <button id="btnFechar" title="Fechar">✕</button>
+      </div>
+    </header>
+
+    <!-- painel de opções -->
+    <div class="opcoes escondido" id="opcoes">
+      <div class="linha"><button id="btnEntrar" class="grande">Conectar o Spotify</button></div>
+      <div class="linha"><button id="btnSair" class="grande secundario escondido">Desconectar o Spotify</button></div>
+      <div class="linha"><button id="btnLetras" class="grande">Conectar letras do Spotify (sincronia exata)</button></div>
+      <div class="linha"><button id="btnLetrasSair" class="grande secundario escondido">Desconectar letras</button></div>
+      <div class="dica" id="dicaLetras">A letra vem do próprio Spotify (igual ao app). Sem isso, uso LRCLIB/NetEase (às vezes fora de tempo).</div>
+      <label class="op"><input type="checkbox" id="optRom" checked> Mostrar romanização (coreano)</label>
+      <label class="op"><input type="checkbox" id="optPt" checked> Mostrar tradução em português</label>
+      <label class="op"><input type="checkbox" id="optAtravessar"> Clicar "através" da janela — fantasma (liga/desliga: Ctrl+Alt+L)</label>
+      <label class="op slider">Opacidade <input type="range" id="optOpacidade" min="40" max="100" value="100"></label>
+    </div>
+
+    <!-- a letra -->
+    <main class="letra" id="letra">
+      <div class="aviso" id="aviso">Conecte o Spotify nas opções (⚙️).</div>
+    </main>
+
+    <!-- barra de progresso + ajuste fino do tempo da letra -->
+    <footer class="rodape">
+      <div class="barra"><div class="preenche" id="preenche"></div></div>
+      <div class="fonte" id="fonte"></div>
+    </footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
