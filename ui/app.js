@@ -94,11 +94,11 @@ function rolar() {
   if (S.nodes[i]) { S.nodes[i].classList.add('ativa'); S.nodes[i].scrollIntoView({ block: 'center', behavior: 'smooth' }); }
   // no modo barra, a linha da vez. Com a tradução ligada → romanização (ou original) + tradução juntas.
   const lin = i >= 0 ? L.linhas[i] : null;
-  if (!lin) { el.bLinha.textContent = '♪'; }
+  if (!lin) { el.bLinha.innerHTML = '<span class="b-base">♪</span>'; }
   else {
     const base = lin.rom || lin.ko || '♪';
-    if (prefs.pt && lin.pt) el.bLinha.innerHTML = `<span>${esc(base)}</span><span class="b-pt">${esc(lin.pt)}</span>`;
-    else el.bLinha.textContent = base;
+    // letra em cima; com a tradução ligada, o português embaixo (menor)
+    el.bLinha.innerHTML = `<span class="b-base">${esc(base)}</span>` + (prefs.pt && lin.pt ? `<span class="b-pt">${esc(lin.pt)}</span>` : '');
   }
 }
 setInterval(rolar, 250);

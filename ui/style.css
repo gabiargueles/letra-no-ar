@@ -39,8 +39,9 @@ body.compacto .barra {
 }
 .b-capa { width: 28px; height: 28px; border-radius: 6px; object-fit: cover; background: rgba(255,255,255,0.06); flex: 0 0 auto; }
 .b-faixa { font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 22%; flex: 0 0 auto; color: var(--texto); }
-.b-linha { flex: 1 1 auto; text-align: center; font-size: 15px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
-.b-linha .b-pt { color: var(--fraco); font-weight: 400; margin-left: 14px; }
+.b-linha { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.15; }
+.b-linha .b-base { font-size: 14px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.b-linha .b-pt { font-size: 11px; font-weight: 400; color: var(--fraco); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 .b-tempo { font-size: 11.5px; color: var(--fraco); flex: 0 0 auto; font-variant-numeric: tabular-nums; }
 .b-botoes { display: flex; gap: 2px; flex: 0 0 auto; -webkit-app-region: no-drag; }
 .b-botoes button { width: 22px; height: 22px; border: none; border-radius: 5px; background: transparent; color: var(--texto); font-size: 12px; cursor: pointer; }
