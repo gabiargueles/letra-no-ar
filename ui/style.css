@@ -113,6 +113,7 @@ button.grande.secundario { background: rgba(255, 255, 255, 0.12); }
 .tut ol { margin: 9px 0 9px 20px; display: flex; flex-direction: column; gap: 6px; line-height: 1.45; }
 .tut b { color: var(--texto); }
 .tut code { background: rgba(255, 255, 255, 0.12); padding: 1px 6px; border-radius: 4px; font-size: 11px; color: var(--texto); user-select: text; -webkit-user-select: text; }
+.tut li .mini { margin-top: 5px; }
 .chave-linha { display: flex; gap: 6px; }
 .chave-linha input { flex: 1; min-width: 0; padding: 7px 9px; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); background: rgba(0,0,0,0.3); color: var(--texto); font-size: 12.5px; }
 .chave-linha input:focus { outline: none; border-color: var(--destaque); }

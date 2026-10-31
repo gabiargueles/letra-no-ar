@@ -51,7 +51,7 @@
       <details class="tut">
         <summary>📘 Como criar seu app do Spotify (pra conectar)</summary>
         <ol>
-          <li>Abra o <b>painel de desenvolvedor</b> do Spotify e faça login (botão abaixo).</li>
+          <li>Abra o <b>painel de desenvolvedor</b> do Spotify e faça login:<br><button id="abrirDevSpotify" class="mini">Abrir painel do Spotify</button></li>
           <li>Clique em <b>Create app</b>.</li>
           <li>Nome e descrição: qualquer coisa (ex.: <i>Letra no Ar</i>).</li>
           <li>Em <b>Redirect URIs</b>, cole exatamente:<br><code>http://127.0.0.1:3040/spotify</code> e clique em <b>Add</b>.</li>
@@ -59,7 +59,6 @@
           <li>Entre no app criado → <b>Settings</b> → copie o <b>Client ID</b>.</li>
           <li>Cole no campo acima e clique em <b>Salvar</b>. Pronto — agora é só <b>Conectar o Spotify</b>.</li>
         </ol>
-        <button id="abrirDevSpotify" class="mini">Abrir painel do Spotify</button>
       </details>
       <div class="linha"><button id="btnLetras" class="grande">Conectar letras do Spotify (sincronia exata)</button></div>
       <div class="linha"><button id="btnLetrasSair" class="grande secundario escondido">Desconectar letras</button></div>
@@ -76,12 +75,11 @@
       <details class="tut">
         <summary>📗 Como conseguir a chave DeepL (opcional)</summary>
         <ol>
-          <li>Crie uma conta grátis no <b>DeepL API</b> (plano <b>DeepL API Free</b>) — botão abaixo.</li>
+          <li>Crie uma conta grátis no <b>DeepL API</b> (plano <b>DeepL API Free</b>):<br><button id="abrirDeepl" class="mini">Abrir painel do DeepL</button></li>
           <li>Precisa informar um cartão pra validar, mas o plano grátis <b>não cobra</b> (até ~500 mil caracteres/mês).</li>
           <li>Em <b>Account → API keys</b>, copie a <b>Authentication Key</b> (costuma terminar em <code>:fx</code>).</li>
           <li>Cole no campo acima e clique em <b>Salvar</b>. Sem isso, a tradução usa o MyMemory (grátis, mais limitado).</li>
         </ol>
-        <button id="abrirDeepl" class="mini">Abrir painel do DeepL</button>
       </details>
     </div>
 
