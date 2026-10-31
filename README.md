@@ -6,6 +6,12 @@ tocando no **Spotify** — e rola no tempo certo, como o recurso de letras do pr
 Serve pra **acompanhar a letra de qualquer tela** — em cima de um jogo, vídeo, stream, o que for — sem
 precisar abrir o Spotify na frente. Fica de canto ou encostada na barra de tarefas.
 
+![Letra no Ar](docs/tela-cheia.jpg)
+
+E o **modo barra**, pra encostar na barra de tarefas:
+
+![Modo barra](docs/barra.jpg)
+
 ## O que faz
 
 - Pega a música tocando no Spotify e mostra a **letra sincronizada**, com a linha da vez destacada e rolagem automática.
