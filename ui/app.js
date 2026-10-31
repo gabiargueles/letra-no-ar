@@ -11,7 +11,6 @@ const el = {
   preenche: $('preenche'), fonte: $('fonte'), opcoes: $('opcoes'),
   btnConfig: $('btnConfig'), btnFixar: $('btnFixar'), btnMin: $('btnMin'), btnFechar: $('btnFechar'),
   btnEntrar: $('btnEntrar'), btnSair: $('btnSair'),
-  btnLetras: $('btnLetras'), btnLetrasSair: $('btnLetrasSair'),
   btnTraducao: $('btnTraducao'), bTraducao: $('bTraducao'),
   optRom: $('optRom'), optPt: $('optPt'), optAtravessar: $('optAtravessar'), optOpacidade: $('optOpacidade'),
   chaveDeepl: $('chaveDeepl'), btnSalvarChave: $('btnSalvarChave'), statusChave: $('statusChave'),
@@ -137,9 +136,6 @@ window.app.aoAtualizar((m) => {
     if (m.id !== S.idLetra) { S.letra = null; mostrarAviso('Buscando a letra…', 'buscando a letra…'); }
   } else if (m.tipo === 'letra') {
     S.letra = m.letra; S.idLetra = m.id; S.ativa = -1; desenharLetra();
-  } else if (m.tipo === 'letras-conectado') {
-    el.btnLetras.classList.toggle('escondido', m.ok);
-    el.btnLetrasSair.classList.toggle('escondido', !m.ok);
   } else if (m.tipo === 'deepl') {
     el.statusChave.textContent = m.tem ? '✅ Chave DeepL salva — tradução pelo DeepL.' : 'Sem chave: uso o MyMemory (grátis, cota pequena). A chave fica só aqui no seu PC.';
     if (m.tem) el.chaveDeepl.value = '';
@@ -172,8 +168,6 @@ el.btnMin.onclick = () => window.app.minimizar();
 el.btnFixar.onclick = () => { prefs.fixar = !prefs.fixar; el.btnFixar.classList.toggle('ativo', prefs.fixar); window.app.fixar(prefs.fixar); salvar(); };
 el.btnEntrar.onclick = () => window.app.entrar();
 el.btnSair.onclick = () => window.app.sair();
-el.btnLetras.onclick = () => window.app.conectarLetras();
-el.btnLetrasSair.onclick = () => window.app.desconectarLetras();
 el.optRom.onchange = () => { prefs.rom = el.optRom.checked; desenharLetra(); salvar(); };
 function aplicarTraducao() { el.optPt.checked = prefs.pt; el.btnTraducao.classList.toggle('ativo', prefs.pt); el.bTraducao.classList.toggle('ativo', prefs.pt); desenharLetra(); }
 function alternarTraducao() { prefs.pt = !prefs.pt; aplicarTraducao(); salvar(); }

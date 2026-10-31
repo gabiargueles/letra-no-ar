@@ -169,6 +169,19 @@ module.exports = function criarSpotifyLetras({ getSpDc, romanizar, traduzir, dat
     return letra;
   }
 
+  // consulta a Web API do Spotify com o MESMO token do login web (ex.: o que está tocando).
+  // Assim não precisa de app registrado nem do limite de usuários do modo de desenvolvimento.
+  async function api(caminho) {
+    await garantirToken();
+    const call = () => fetch('https://api.spotify.com/v1' + caminho, { headers: { Authorization: 'Bearer ' + token.access, 'User-Agent': UA } });
+    let r = await call();
+    if (r.status === 401) { token = null; await garantirToken(); r = await call(); }
+    if (r.status === 204) return null; // nada tocando
+    if (r.status === 429) throw new Error('Spotify HTTP 429:' + (+r.headers.get('retry-after') || 10));
+    if (!r.ok) throw new Error('Spotify HTTP ' + r.status);
+    return r.json();
+  }
+
   function esquecer() { token = null; }
-  return { obter, esquecer };
+  return { obter, esquecer, api };
 };
