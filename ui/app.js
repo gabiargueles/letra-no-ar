@@ -9,7 +9,7 @@ const $ = (id) => document.getElementById(id);
 const el = {
   capa: $('capa'), faixa: $('faixa'), artista: $('artista'), letra: $('letra'), aviso: $('aviso'),
   preenche: $('preenche'), fonte: $('fonte'), opcoes: $('opcoes'),
-  btnConfig: $('btnConfig'), btnFixar: $('btnFixar'), btnMin: $('btnMin'), btnFechar: $('btnFechar'),
+  btnConfig: $('btnConfig'), btnFixar: $('btnFixar'), btnMin: $('btnMin'), btnFechar: $('btnFechar'), btnFecharOpcoes: $('btnFecharOpcoes'),
   btnEntrar: $('btnEntrar'), btnSair: $('btnSair'),
   btnLetras: $('btnLetras'), btnLetrasSair: $('btnLetrasSair'),
   btnTraducao: $('btnTraducao'), bTraducao: $('bTraducao'),
@@ -172,6 +172,7 @@ function salvar() { window.app.salvarPrefs(prefs); }
 
 // ---------- botões ----------
 el.btnConfig.onclick = () => el.opcoes.classList.toggle('escondido');
+el.btnFecharOpcoes.onclick = () => el.opcoes.classList.add('escondido');
 el.btnFechar.onclick = () => window.app.fechar();
 el.btnMin.onclick = () => window.app.minimizar();
 el.btnFixar.onclick = () => { prefs.fixar = !prefs.fixar; el.btnFixar.classList.toggle('ativo', prefs.fixar); window.app.fixar(prefs.fixar); salvar(); };
