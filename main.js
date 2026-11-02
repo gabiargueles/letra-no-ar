@@ -72,7 +72,7 @@ function sair() { token = null; try { fs.rmSync(path.join(PASTA, 'spotify.json')
 let janelaLogin = null;
 function conectarLetras() {
   if (janelaLogin && !janelaLogin.isDestroyed()) { janelaLogin.focus(); return; }
-  janelaLogin = new BrowserWindow({ width: 500, height: 720, title: 'Entrar no Spotify (para as letras)', autoHideMenuBar: true });
+  janelaLogin = new BrowserWindow({ width: 500, height: 720, title: 'Entrar no Spotify (para as letras)', icon: path.join(__dirname, 'ui', 'icon.png'), autoHideMenuBar: true });
   janelaLogin.loadURL('https://accounts.spotify.com/pt-BR/login?continue=https%3A%2F%2Fopen.spotify.com%2F');
   const checar = async () => {
     if (!janelaLogin || janelaLogin.isDestroyed()) return;
@@ -161,6 +161,7 @@ function criarJanela() {
     frame: false, transparent: true, backgroundColor: '#00000000',
     alwaysOnTop: true, skipTaskbar: false, resizable: true,
     title: 'Letra no Ar',
+    icon: path.join(__dirname, 'ui', 'icon.png'),
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false },
   });
   janela.setAlwaysOnTop(true, 'screen-saver'); // fica acima até de jogos em janela

@@ -121,18 +121,18 @@ window.app.aoAtualizar((m) => {
     S.conectado = m.conectado;
     el.btnEntrar.classList.toggle('escondido', m.conectado);
     el.btnSair.classList.toggle('escondido', !m.conectado);
-    if (!m.conectado) { el.capa.removeAttribute('src'); el.bCapa.removeAttribute('src'); el.faixa.textContent = 'Letra no Ar'; el.bFaixa.textContent = 'Letra no Ar'; el.artista.textContent = 'conecte o Spotify pra começar'; mostrarAviso('Conecte o Spotify nas opções (⚙️).', 'conecte o Spotify'); el.preenche.style.width = '0'; }
+    if (!m.conectado) { el.capa.src = 'icon.png'; el.bCapa.src = 'icon.png'; el.faixa.textContent = 'Letra no Ar'; el.bFaixa.textContent = 'Letra no Ar'; el.artista.textContent = 'conecte o Spotify pra começar'; mostrarAviso('Conecte o Spotify nas opções (⚙️).', 'conecte o Spotify'); el.preenche.style.width = '0'; }
     else if (!S.letra) mostrarAviso('Conectado! Dá play numa música no Spotify.', 'dá play no Spotify');
   } else if (m.tipo === 'tocando') {
     el.faixa.textContent = m.faixa;
     el.artista.textContent = m.artista;
     el.bFaixa.textContent = m.faixa;
-    if (m.capa) { el.capa.src = m.capa; el.bCapa.src = m.capa; } else { el.capa.removeAttribute('src'); el.bCapa.removeAttribute('src'); }
+    if (m.capa) { el.capa.src = m.capa; el.bCapa.src = m.capa; } else { el.capa.src = 'icon.png'; el.bCapa.src = 'icon.png'; }
     S.base = { pos: m.pos, em: Date.now(), tocando: m.tocando };
     S.dur = m.dur;
   } else if (m.tipo === 'parado') {
     el.faixa.textContent = 'Nada tocando'; el.artista.textContent = 'dá play no Spotify';
-    el.capa.removeAttribute('src'); el.preenche.style.width = '0';
+    el.capa.src = 'icon.png'; el.bCapa.src = 'icon.png'; el.preenche.style.width = '0';
     el.bFaixa.textContent = 'Nada tocando';
     S.base = null; S.letra = null; S.idLetra = null; mostrarAviso('Nada tocando agora. Dá play numa música no Spotify.', 'nada tocando');
   } else if (m.tipo === 'letra-carregando') {

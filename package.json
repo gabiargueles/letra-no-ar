@@ -1,6 +1,6 @@
 {
   "name": "letra-no-ar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Letra no Ar — janelinha sempre em primeiro plano que mostra a letra sincronizada da música tocando no Spotify",
   "author": "Gabbie",
   "main": "main.js",
@@ -21,6 +21,7 @@
       "letras.js",
       "spotify-letras.js",
       "ui/**",
+      "build/**",
       "package.json"
     ],
     "asarUnpack": [
@@ -31,6 +32,7 @@
       "buildResources": "build"
     },
     "win": {
+      "icon": "build/icon.ico",
       "target": [
         "portable",
         "nsis"
